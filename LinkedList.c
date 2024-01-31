@@ -1,58 +1,53 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-struct Node {
+typedef struct node {
     int value;
-    struct Node *next;
-};
+    struct node *next;
+} Node;
 
-// Returns a first node(head) in LL
-struct Node createList(int value) {
-    struct Node node;
-    node.value = value;
-    node.next = NULL;
+Node* createNewNode(int value) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->value = value;
+    newNode->next = NULL;
 
-    return node;
+    return newNode;
 }
 
-void addNodeAtIndex(struct Node head, int value, int index) {
-    struct Node newNode;
-    newNode.value = value;
-    newNode.next = NULL; 
-    
-    struct Node node = head;
-    int i = 0;
-    // Traverse either till the last element or one before the given index.
-    while(i < index-1 && node.next != NULL) {
-        node = *(node.next);
-        i++;
+/**
+head -> Doulbe pointer is required in order to set head pointer in main func to point to the new node if NULL.
+*/
+void appendNode(Node** head, int value) {
+    Node* newNode = createNewNode(value);
+
+    // set the head for caller of this function, i.e. main func.
+    if (*head == NULL) {
+        *head = newNode;
+        return;
     }
 
-    // Looped through LL to reach node at i-1 to append.
-    // NOTE: if the index is larger than the list's length, then new node is appended at the last.
-    newNode.next = node.next;
-    node.next = &newNode;
-}
-
-void printList(struct Node head) {
-    struct Node node = head;
-    while (node.next != NULL) {
-        printf("Value: %d, Addr: %p\n", node.value, node.next);
-        node = *(node.next);
+    // Iterate over the LL to go to last element.
+    Node* temp = *head;
+    while(temp->next != NULL) {
+        temp = temp->next;
     }
 
-    // Print last element
-    printf("Value: %d, Addr: %p\n", node.value, node.next);
+    temp->next = newNode;
 }
 
-// Node 1 (value, next:(Node 2)) -> Node 2 (value, next:(Node 3)) -> Node 3 (value, next:())
+void printList(Node* head) {
+    while(head != NULL) {
+        printf("Value: %d\n", head->value);
+        head = head->next;
+    }
+}
 
 int main(){
-    printf("Linked list says hello!\n");
+    Node* head = NULL;
 
-    struct Node head = createList(11);
-    addNodeAtIndex(head, 12, 1);
-    addNodeAtIndex(head, 13, 2);
-    addNodeAtIndex(head, 14, 3);
-    // printf("Next addr: %p", head.next);
+    appendNode(&head, 11);
+    appendNode(&head, 12);
+    appendNode(&head, 13);
+
     printList(head);
 }
