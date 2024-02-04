@@ -1,5 +1,5 @@
 /**
-Implement Head DS
+Implement MinHead DS
 - operations: insert, delete
 */
 
@@ -16,7 +16,37 @@ void printArray(int arr[], int arrSize) {
     printf("\n");
 }
 
-void heapify(int* arr, int* size) {
+int parent(int idx, int size) {
+   int pIdx = (currIdx-1)/2;
+
+   if (pIdx < 0) {
+        return -1;
+   } else {
+        return pIdx;
+   }
+}
+
+int leftChild(int* arr, int idx, int size) {
+    int lIdx = 2*idx + 1;
+
+    if (lIdx > size-1) {
+        return -1;
+    } else {
+        return lIdx;
+    }
+}
+
+int rightChild(int* arr, int idx, int size) {
+    int rIdx = 2*idx + 2;
+
+    if (rIdx > size-1) {
+        return -1;
+    } else {
+        return rIdx;
+    }
+}
+
+void heapifyUp(int* arr, int* size) {
 
     int currIdx = *size - 1;
     int parentIdx = (currIdx-1)/2;
@@ -33,6 +63,40 @@ void heapify(int* arr, int* size) {
 
 }
 
+void heapifyDown(int* arr, int size) {
+    int currIdx = 0;
+    int lIdx, rIdx, currValue, lValue, rValue;
+
+    while (lIdx<size || rIdx<size) {
+        lIdx = leftChild(currIdx, size);
+        rIdx = rightChild(currIdx, size);
+        currValue = arr[currIdx];
+        
+        if (rIdx >= size) { // Right child does not exist. Only left exists
+            lValue = arr[lIdx];
+            if (currValue > lValue) {
+                arr[currIdx] = lValue;
+                arr[lIdx] = currValue;
+                currIdx = lIdx;
+            }
+        } else { // both right and left child exists.
+            lValue = arr[lIdx];
+            rValue = arr[rIdx];
+
+            if (lValue < rValue && (lValue < currValue)) {
+                arr[currIdx] = lValue;
+                arr[lIdx] = currValue;
+                currIdx = lIdx;
+            } else if (rValue < lValue && (rValue < currValue)) {
+                arr[currIdx] = rValue;
+                arr[rIdx] = currValue;
+                currIdx = rIdx;
+            }
+        }
+        
+    }
+}
+
 void insert(int* arr, int value, int* size, int capacity) {
     // Check if place is available to insert in array.
     if (*size == capacity) {
@@ -45,7 +109,7 @@ void insert(int* arr, int value, int* size, int capacity) {
 
     *size = *size + 1;
 
-    heapify(arr, size);
+    heapifyUp(arr, size);
 }
 
 int getMin(int* arr, int* size) {
@@ -59,7 +123,7 @@ int getMin(int* arr, int* size) {
     arr[*size - 1] = NIL;
     *size = *size - 1;
 
-    heapify(arr, size);
+    heapifyDown(arr, size);
 
     return min;
 }
