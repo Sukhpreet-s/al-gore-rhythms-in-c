@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "Utils.h"
 
 // Returns index of the needle in array.
 int binarySearch(int* arr, int arrSize, int needle) {
@@ -55,14 +56,6 @@ void poopOnEmptyArray(int* arr, int arrSize) {
         arr[i] = startingNumber;
         startingNumber += skipNumber;
     }
-}
-
-void printArray(int* arr, int arrSize) {
-    printf("Pooping here: ");
-    for(int i=0; i<arrSize; i++) {
-        printf("%d, ", arr[i]);
-    }
-    printf("\n");
 }
 
 int main() {

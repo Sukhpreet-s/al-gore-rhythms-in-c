@@ -3,15 +3,7 @@ Lets do some sorting.
 Start with QuickSort
 */ 
 #include <stdio.h>
-
-// TODO: Find a way to have common functions in a separate file for reusability instead of copying same piece of code. FYI, same function in BinarySearch.c
-void printArray(int* arr, int arrSize) {
-    printf("Pooping here: ");
-    for(int i=0; i<arrSize; i++) {
-        printf("%d, ", arr[i]);
-    }
-    printf("\n");
-}
+#include "Utils.h"
 
 /*
 Weakly sorts the array around chosen pivot index (in this case, we chose hi to make it simple)

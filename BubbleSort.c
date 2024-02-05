@@ -1,12 +1,5 @@
 #include <stdio.h>
-
-void printArray(int* arr, int arrSize) {
-    printf("Pooping here: ");
-    for(int i=0; i<arrSize; i++) {
-        printf("%d, ", arr[i]);
-    }
-    printf("\n");
-}
+#include "Utils.h"
 
 void bubblesort(int arr[], int arrSize) {
 

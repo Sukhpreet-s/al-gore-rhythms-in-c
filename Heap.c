@@ -5,16 +5,9 @@ Implement MinHead DS
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "Utils.h"
 
 #define NIL 999999999
-
-void printArray(int arr[], int arrSize) {
-    printf("Pooping here: ");
-    for(int i=0; i<arrSize; i++) {
-        printf("%d, ", arr[i]);
-    }
-    printf("\n");
-}
 
 int parent(int idx, int size) {
    int pIdx = (currIdx-1)/2;
