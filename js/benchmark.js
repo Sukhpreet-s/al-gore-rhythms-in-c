@@ -3,27 +3,79 @@ if (process.argv.length <= 2) {
     process.exit(1);
 }
 
-try {
-    const filename = process.argv[2]
-    const pathPrefix = './'
-    import(pathPrefix + filename).then(module => {
-        const { fn, args } = module
-        benchmark(fn, args)
+import fs from 'fs/promises';
 
-        process.exit(1)
+const algoName = process.argv[2]
+const pathPrefix = './'
+const filenamePattern = 'algo'
+
+/*
+* Access all filename
+*/
+console.log('Logging files: ')
+const files = await fs.readdir(pathPrefix + algoName)
+    .then(files => files.filter(filename => filename.startsWith(filenamePattern)))
+    .catch(err => {
+        console.log('!!!!!!!!!Error while reading filenames!!!!!!!!!')
+        return null;
     })
-} catch (error) {
-    console.error("Ensure that given file exists in the current working directory!")
-    // console.error(error)
+
+if (!files) {
+    console.log("No function files detected! Terminating!")
     process.exit(1)
 }
+console.log(files)
 
-function benchmark(fn, variations) {
-    for (let args of variations) {
-        const start = performance.now()
-        const output = fn(...args)
-        const end = performance.now()
-        console.log(`${fn.name} with\t input ${args[0]}\t output ${output}\t took: ${(end - start) | 0} ms`)
+/*
+* Access all functions
+*/
+console.log('Logging functions')
+const functions = await Promise.all(
+    files.map(async (file) => {
+        try {
+            const module = await import(`${pathPrefix}${algoName}/${file}`)
+            return { name: file, fn: module.default }
+        } catch (err) {
+            console.error(`Error while loading module for file: ${file}`, err)
+            return null
+        }
+    })
+)
+
+if (!functions) {
+    console.log("No function files detected! Terminating!")
+    process.exit(1)
+}
+console.log(functions)
+
+/*
+* Access input data
+*/
+const input = await import(pathPrefix + algoName + "/input.js")
+    .then(module => module.default)
+    .catch(err => {
+        console.log("!!!!! Error while getting input data!!!!", err)
+        return null
+    })
+
+if (!input || input.length == 0) {
+    console.log("No input detected! Terminating!")
+    process.exit(1)
+}
+console.log(input)
+
+console.log(`Running the ${algoName} functions`)
+runBenchmark(functions, input)
+
+// benchmark(fn, args)
+function runBenchmark(fns, variations) {
+    for (let fn of fns) {
+        console.log(`For ${fn.name}: `)
+        for (let args of variations) {
+            const start = performance.now()
+            const output = fn.fn(...args)
+            const end = performance.now()
+            console.log(`\t with\t input ${args[0]}\t output ${output}\t took: ${(end - start) | 0} ms`)
+        }
     }
 }
-

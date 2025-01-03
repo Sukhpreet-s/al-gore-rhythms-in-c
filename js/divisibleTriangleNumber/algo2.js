@@ -1,5 +1,5 @@
 
-function divisibleTriangleNumber(n) {
+export default function divisibleTriangleNumber(n) {
   // Helper function to count factors of a number
   function countFactors(num) {
     let count = 0;
@@ -25,11 +25,4 @@ function divisibleTriangleNumber(n) {
 
     if (factors > n) return triangleNum;
   }
-}
-
-const args = [[5], [23], [167], [374], [500]]
-
-export {
-    divisibleTriangleNumber as fn,
-    args,
 }

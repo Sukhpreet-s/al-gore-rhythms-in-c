@@ -1,4 +1,4 @@
-function divisibleTriangleNumber(n) {
+export default function divisibleTriangleNumber(n) {
     // What is the first number that will have n factors
     const MAX_POSITION = 76576500
 
@@ -38,11 +38,4 @@ function divisibleTriangleNumber(n) {
     }
 
     return triangleNum;
-}
-
-const args = [[5], [23], [167], [374], [500]]
-
-export {
-    divisibleTriangleNumber as fn,
-    args,
 }
