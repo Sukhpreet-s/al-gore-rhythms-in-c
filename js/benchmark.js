@@ -64,18 +64,25 @@ if (!input || input.length == 0) {
 }
 console.log(input)
 
-console.log(`Running the ${algoName} functions`)
-runBenchmark(functions, input)
+const times = 5
+console.log(`Running the ${algoName} functions ${times} times each (avg)`)
+runBenchmark(functions, input, times)
 
 // benchmark(fn, args)
-function runBenchmark(fns, variations) {
+function runBenchmark(fns, variations, times) {
     for (let fn of fns) {
         console.log(`For ${fn.name}: `)
         for (let args of variations) {
-            const start = performance.now()
-            const output = fn.fn(...args)
-            const end = performance.now()
-            console.log(`\t with\t input ${args[0]}\t output ${output}\t took: ${(end - start) | 0} ms`)
+            let output = null
+            let sum = 0
+            for (let i = 0; i < times; i++) {
+                const start = performance.now()
+                output = fn.fn(...args)
+                const end = performance.now()
+                sum += (end - start)
+            }
+            const avg = sum / times;
+            console.log(`\t with\t input ${args[0]}\t output ${output}\t took(avg): ${avg | 0} ms`)
         }
     }
 }
