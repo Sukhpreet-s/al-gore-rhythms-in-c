@@ -22,4 +22,3 @@ This repository contains clean, well-documented implementations of classic algor
 ### Utilities
 - Helper functions and utilities for common operations
 
-## File Structure
