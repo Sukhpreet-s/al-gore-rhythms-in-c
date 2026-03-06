@@ -1,2 +1,2 @@
-# Al Gore Rhythms in C
+# Algorithms in C
 Place to learn algorithms.
